@@ -11,6 +11,8 @@ past. Copy one into your project and change the parts you care about.
 
 ### [Aegis Commit](examples/aegis-commit-ts)
 
+**[Open the verified Solari-live run](https://aegis-commit-demo-980932890834.us-east1.run.app/)**
+
 Crash-consistent execution for browser agents. A Solari browser deliberately
 dies after a sandbox-hosted target commits an operation but before the browser
 receives the acknowledgement. A fresh recovery browser performs an authoritative

@@ -1,5 +1,6 @@
 import { Solari } from "@solarisdk/browser"
 import { SolariClient } from "@solarisdk/sdk"
+import { createHash } from "node:crypto"
 
 import { AmbiguousOutcomeError, IntentConflictError } from "../core/errors.js"
 import type {
@@ -19,6 +20,12 @@ function endpoint(origin: string, pathname: string): string {
   return url.toString()
 }
 
+export function withAckDelay(origin: string, ackDelayMs: number): string {
+  const url = new URL(origin)
+  url.searchParams.set("ackDelayMs", String(ackDelayMs))
+  return url.toString()
+}
+
 async function waitForReceipt(origin: string, key: string, timeoutMs = 4_000): Promise<void> {
   const deadline = Date.now() + timeoutMs
   while (Date.now() < deadline) {
@@ -30,9 +37,13 @@ async function waitForReceipt(origin: string, key: string, timeoutMs = 4_000): P
 }
 
 export interface SolariRuntimeEvidence {
-  readonly sandboxId: string
-  readonly previewUrl: string
-  readonly browserSessionIds: readonly string[]
+  readonly sandboxFingerprint: string
+  readonly previewHost: string
+  readonly browserSessionFingerprints: readonly string[]
+}
+
+function fingerprint(value: string): string {
+  return createHash("sha256").update(value).digest("hex").slice(0, 16)
 }
 
 export class SolariEffectTarget implements EffectTarget {
@@ -81,7 +92,7 @@ export class SolariEffectTarget implements EffectTarget {
     try {
       const page = await session.newPage()
       const ackDelayMs = options.fault === "after_commit_before_ack" ? 2_500 : 0
-      await page.goto(`${this.origin}?ackDelayMs=${ackDelayMs}`)
+      await page.goto(withAckDelay(this.origin, ackDelayMs))
       await page.locator("#idempotency-key").fill(operation.idempotencyKey)
       await page.locator("#intent-hash").fill(operation.intentHash)
       await page.locator("#amount").fill(String(operation.intent.amountCents))
@@ -137,9 +148,9 @@ export class SolariEffectTarget implements EffectTarget {
 
   evidence(): SolariRuntimeEvidence {
     return {
-      sandboxId: this.sandbox.sandboxId,
-      previewUrl: this.origin,
-      browserSessionIds: [...this.sessionIds],
+      sandboxFingerprint: fingerprint(this.sandbox.sandboxId),
+      previewHost: new URL(this.origin).host,
+      browserSessionFingerprints: this.sessionIds.map(fingerprint),
     }
   }
 

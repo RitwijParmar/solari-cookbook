@@ -1,0 +1,10 @@
+*
+!Dockerfile
+!deploy/
+!deploy/nginx.conf
+!evidence/
+!evidence/latest/
+!evidence/latest/index.html
+!evidence/latest/evidence.json
+!evidence/latest/audit.jsonl
+!evidence/latest/live-audit.jsonl

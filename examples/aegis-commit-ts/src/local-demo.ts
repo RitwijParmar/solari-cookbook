@@ -57,7 +57,7 @@ export async function runLocalDemo(benchmarkOperations = 100): Promise<DemoEvide
     mode: "deterministic",
     guarantee:
       "Exactly-once requires either target-side idempotency or an authoritative reconciliation read. Aegis refuses to claim the guarantee when neither primitive exists.",
-    runtime: { provider: "in-process", browserSessionIds: [] },
+    runtime: { provider: "in-process", browserSessionFingerprints: [] },
     cases,
     audit: cases.flatMap((item) => item.result.projection.events),
     benchmark: benchmarkSummary(durations, ambiguous, duplicateEffects),

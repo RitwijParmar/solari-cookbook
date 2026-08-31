@@ -18,9 +18,9 @@ export interface DemoEvidence {
   readonly guarantee: string
   readonly runtime: {
     readonly provider: "in-process" | "solari"
-    readonly sandboxId?: string
-    readonly previewUrl?: string
-    readonly browserSessionIds: readonly string[]
+    readonly sandboxFingerprint?: string
+    readonly previewHost?: string
+    readonly browserSessionFingerprints: readonly string[]
   }
   readonly cases: readonly DemoCase[]
   readonly audit: readonly AuditEvent[]
@@ -58,6 +58,10 @@ function safeJson(value: unknown): string {
 }
 
 function reportHtml(evidence: DemoEvidence): string {
+  const fourthMetric =
+    evidence.mode === "solari-live"
+      ? { value: `${evidence.cases[0]?.durationMs ?? 0}ms`, label: "live crash recovery" }
+      : { value: `${evidence.benchmark.p95Ms}ms`, label: "p95 recovery" }
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -70,8 +74,8 @@ function reportHtml(evidence: DemoEvidence): string {
 </head>
 <body><main class="shell">
   <header><div><div class="eyebrow">Crash-consistent browser operations</div><h1>Aegis<br>Commit</h1><p class="lede">Crash after commit. Recover without doing it twice. Every state transition below came from the tamper-evident audit chain of this run.</p></div><div class="seal">VERIFIED RUN<br>${evidence.mode.toUpperCase()}<br>${evidence.generatedAt}</div></header>
-  <section class="grid"><div class="metric"><strong>${evidence.benchmark.operations}</strong><span>fault schedules</span></div><div class="metric"><strong>${evidence.benchmark.injectedAmbiguousOutcomes}</strong><span>unknown outcomes</span></div><div class="metric"><strong>${evidence.benchmark.duplicateEffects}</strong><span>duplicate effects</span></div><div class="metric"><strong>${evidence.benchmark.p95Ms}ms</strong><span>p95 recovery</span></div></section>
-  <section class="card"><div class="eyebrow">Runtime evidence</div><p><b>${evidence.runtime.provider}</b>${evidence.runtime.sandboxId ? ` · sandbox ${evidence.runtime.sandboxId}` : ""} · ${evidence.runtime.browserSessionIds.length} browser sessions</p></section>
+  <section class="grid"><div class="metric"><strong>${evidence.benchmark.operations}</strong><span>deterministic schedules</span></div><div class="metric"><strong>${evidence.benchmark.injectedAmbiguousOutcomes}</strong><span>simulated unknowns</span></div><div class="metric"><strong>${evidence.benchmark.duplicateEffects}</strong><span>duplicate effects</span></div><div class="metric"><strong>${fourthMetric.value}</strong><span>${fourthMetric.label}</span></div></section>
+  <section class="card"><div class="eyebrow">Runtime evidence</div><p><b>${evidence.runtime.provider}</b>${evidence.runtime.sandboxFingerprint ? ` · sandbox fingerprint ${evidence.runtime.sandboxFingerprint}` : ""} · ${evidence.runtime.browserSessionFingerprints.length} browser sessions</p></section>
   <div id="cases"></div>
   <section class="card"><div class="eyebrow">Guarantee boundary</div><p>${evidence.guarantee}</p><span class="flag">write-ahead log</span><span class="flag">idempotency key</span><span class="flag">read-after-unknown</span><span class="flag">hash-chained evidence</span></section>
   <footer>Aegis Commit / Solari browser + sandbox / evidence schema ${evidence.schemaVersion}</footer>

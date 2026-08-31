@@ -5,7 +5,7 @@ import { SolariEffectTarget } from "./adapters/solari-target.js"
 import { DurableAuditLog } from "./core/audit.js"
 import { ExactlyOnceCoordinator } from "./core/coordinator.js"
 import type { EffectIntent } from "./core/types.js"
-import { benchmarkSummary, type DemoEvidence } from "./evidence.js"
+import type { DemoEvidence } from "./evidence.js"
 import { runLocalDemo } from "./local-demo.js"
 
 const LIVE_INTENT: EffectIntent = {
@@ -45,13 +45,7 @@ export async function runSolariDemo(apiKey: string, artifactDirectory: string): 
         ...deterministic.cases,
       ],
       audit: await audit.list(),
-      benchmark: benchmarkSummary(
-        Array.from({ length: deterministic.benchmark.operations }, () =>
-          deterministic.benchmark.p50Ms,
-        ),
-        deterministic.benchmark.injectedAmbiguousOutcomes + 1,
-        deterministic.benchmark.duplicateEffects + Math.max(0, result.target.effects - 1),
-      ),
+      benchmark: deterministic.benchmark,
     }
   } finally {
     await target.close()

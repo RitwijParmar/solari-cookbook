@@ -9,6 +9,7 @@
   "scripts": {
     "demo": "tsx src/cli.ts demo",
     "demo:local": "tsx src/cli.ts demo --local",
+    "verify:evidence": "tsx scripts/verify-evidence.ts",
     "test": "tsx --test tests/**/*.test.ts",
     "typecheck": "tsc --noEmit",
     "check": "pnpm typecheck && pnpm test"

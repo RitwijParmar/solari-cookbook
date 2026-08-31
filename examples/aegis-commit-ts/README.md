@@ -2,6 +2,9 @@
 
 > Crash after commit. Recover without doing it twice.
 
+**[Public verified run](https://aegis-commit-demo-980932890834.us-east1.run.app/)** ·
+[machine-readable evidence](https://aegis-commit-demo-980932890834.us-east1.run.app/evidence.json)
+
 Browser agents fail in the worst possible place: the remote system accepts a
 purchase, payout, ticket, or configuration change, then the browser disappears
 before the agent sees the success response. A naïve retry duplicates the side
@@ -83,7 +86,7 @@ pnpm check
 pnpm demo:local
 
 # Real sandbox + browser sessions + recordings.
-export SOLARI_API_KEY=slr_live_...
+export SOLARI_API_KEY=YOUR_SOLARI_API_KEY
 pnpm demo
 ```
 
@@ -97,6 +100,28 @@ Both commands generate:
 The local run covers 100 deterministic schedules. The live run adds the critical
 `commit → lost acknowledgement → recovery read` path against real Solari
 infrastructure.
+
+Validate the checked-in evidence independently:
+
+```bash
+pnpm verify:evidence
+```
+
+## Deploy the evidence dashboard
+
+The committed container serves only sanitized evidence. Opaque Solari resource
+identifiers are reduced to one-way fingerprints before serialization; signed
+preview parameters and API credentials never enter the image.
+
+```bash
+gcloud run deploy aegis-commit-demo \
+  --source . \
+  --region us-east1 \
+  --allow-unauthenticated
+```
+
+The image runs as an unprivileged user, exposes `/ready`, and sends CSP,
+clickjacking, MIME-sniffing, referrer, and permissions-policy headers.
 
 ## Failure matrix
 
@@ -133,7 +158,8 @@ It keeps CI keyless and exhaustive; the evidence schema labels runs as either
 - Receipts are checked against key, intent hash, and amount before commit.
 - Solari sandboxes are always killed in `finally`; browser clients are closed.
 - Secrets enter only through `SOLARI_API_KEY` and never appear in artifacts.
-- CI runs strict TypeScript, all tests, and a high-severity dependency audit.
+- CI runs strict TypeScript, all tests, evidence verification, and a
+  high-severity dependency audit.
 
 ## Scope
 
