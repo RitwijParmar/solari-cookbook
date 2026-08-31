@@ -7,6 +7,28 @@ Every example in this repo is a complete program you can run in under a minute.
 They are deliberately small: one idea each, no framework, no scaffolding to read
 past. Copy one into your project and change the parts you care about.
 
+## Featured systems build
+
+### [Aegis Commit](examples/aegis-commit-ts)
+
+Crash-consistent execution for browser agents. A Solari browser deliberately
+dies after a sandbox-hosted target commits an operation but before the browser
+receives the acknowledgement. A fresh recovery browser performs an authoritative
+receipt lookup, proves the effect already exists, and does **not** click twice.
+
+The implementation includes a hash-chained write-ahead log, intent binding,
+single-flight concurrency control, target-side idempotency, read-after-unknown
+reconciliation, fault injection, and a reproducible evidence dashboard. It also
+states the important boundary plainly: exactly-once cannot be promised when a
+target offers neither idempotency nor an authoritative read.
+
+```bash
+cd examples/aegis-commit-ts
+pnpm install
+pnpm demo:local     # 100 deterministic fault schedules, no key required
+pnpm demo           # real Solari sandbox + recorded browser when SOLARI_API_KEY is set
+```
+
 ## Examples
 
 ### Cloud browser
@@ -32,6 +54,12 @@ past. Copy one into your project and change the parts you care about.
 | Example | Language | What it shows |
 | --- | --- | --- |
 | [desktop-computer-use-py](examples/desktop-computer-use-py) | Python | Screenshot, click, and type on a Linux GUI |
+
+### End-to-end systems
+
+| Example | Language | What it shows |
+| --- | --- | --- |
+| [aegis-commit-ts](examples/aegis-commit-ts) | TypeScript | Exactly-once side effects across browser crashes using a sandbox target, durable audit log, and reconciliation |
 
 ## Running an example
 
