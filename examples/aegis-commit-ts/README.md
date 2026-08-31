@@ -5,6 +5,12 @@
 **[Public verified run](https://aegis-commit-demo-980932890834.us-east1.run.app/)** ·
 [machine-readable evidence](https://aegis-commit-demo-980932890834.us-east1.run.app/evidence.json)
 
+[![Aegis Commit demo cover](demo/aegis-commit-cover.jpg)](demo/aegis-commit-demo.mp4)
+
+**[Watch the 64-second running demo](demo/aegis-commit-demo.mp4)** — live dashboard,
+real recovery audit trail, executable verification, and public CI; no slides or
+staged success screens.
+
 Browser agents fail in the worst possible place: the remote system accepts a
 purchase, payout, ticket, or configuration change, then the browser disappears
 before the agent sees the success response. A naïve retry duplicates the side

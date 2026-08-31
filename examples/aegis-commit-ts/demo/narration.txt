@@ -1,0 +1,9 @@
+Most browser agents have a dangerous blind spot. The form submits, the server commits, and then the browser disappears before the success response. Retry, and you may pay twice. Stop, and the workflow never finishes.
+
+I built Aegis Commit for that ambiguous window. The target ledger runs inside a Solari sandbox. Browser one submits a synthetic vendor payment. The sandbox persists exactly one receipt, but I delay the acknowledgement and terminate the browser.
+
+The coordinator records outcome unknown in a hash-chained write-ahead log. A completely fresh Solari browser then reads the authoritative receipt. The intent hash matches, so Aegis commits locally without sending a second payment.
+
+This is the real run: two browser sessions, one target effect, zero duplicates, and a three-point-eight-four second recovery. The deterministic suite also covers one hundred schedules, concurrent callers, pre-send crashes, mutated intents, and audit tampering.
+
+Everything is public: the implementation, threat model, machine-readable evidence, green CI, and the GCP deployment. I'm Ritwij Aryan Parmar. I built the control plane browser agents need before they touch expensive side effects.
