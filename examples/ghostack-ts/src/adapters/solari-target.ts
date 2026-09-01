@@ -63,7 +63,7 @@ export class SolariEffectTarget implements EffectTarget {
     const sandbox = await client.sandboxes.create({
       template: "base",
       timeoutMs: 10 * 60_000,
-      metadata: { product: "aegis-commit", purpose: "exactly-once-demo" },
+      metadata: { product: "ghostack", purpose: "browser-agent-chaos-test" },
     })
     await sandbox.connect()
     await sandbox.files.write("/tmp/aegis-target.mjs", TARGET_PROGRAM)

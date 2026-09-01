@@ -1,0 +1,51 @@
+name: GhostAck
+
+on:
+  push:
+    paths:
+      - "examples/ghostack-ts/**"
+      - ".github/workflows/ghostack.yml"
+  pull_request:
+    paths:
+      - "examples/ghostack-ts/**"
+      - ".github/workflows/ghostack.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: ghostack
+          POSTGRES_PASSWORD: ghostack
+          POSTGRES_DB: ghostack_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ghostack"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgres://ghostack:ghostack@localhost:5432/ghostack_test
+    defaults:
+      run:
+        working-directory: examples/ghostack-ts
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.19.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: examples/ghostack-ts/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm audit --audit-level=high

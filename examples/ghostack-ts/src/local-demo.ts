@@ -52,7 +52,7 @@ export async function runLocalDemo(benchmarkOperations = 100): Promise<DemoEvide
 
   return {
     schemaVersion: "1.0",
-    product: "Aegis Commit",
+    product: "GhostAck",
     generatedAt: new Date().toISOString(),
     mode: "deterministic",
     guarantee:

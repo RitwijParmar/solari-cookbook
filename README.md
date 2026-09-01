@@ -9,9 +9,9 @@ past. Copy one into your project and change the parts you care about.
 
 ## Featured systems build
 
-### [Aegis Commit](examples/aegis-commit-ts)
+### [GhostAck](examples/ghostack-ts)
 
-**[Open the verified Solari-live run](https://aegis-commit-demo-980932890834.us-east1.run.app/)**
+**[Open the interactive chaos lab](https://ghostack-control-lab-980932890834.us-east1.run.app/)**
 
 Crash-consistent execution for browser agents. A Solari browser deliberately
 dies after a sandbox-hosted target commits an operation but before the browser
@@ -25,7 +25,7 @@ states the important boundary plainly: exactly-once cannot be promised when a
 target offers neither idempotency nor an authoritative read.
 
 ```bash
-cd examples/aegis-commit-ts
+cd examples/ghostack-ts
 pnpm install
 pnpm demo:local     # 100 deterministic fault schedules, no key required
 pnpm demo           # real Solari sandbox + recorded browser when SOLARI_API_KEY is set
@@ -61,7 +61,7 @@ pnpm demo           # real Solari sandbox + recorded browser when SOLARI_API_KEY
 
 | Example | Language | What it shows |
 | --- | --- | --- |
-| [aegis-commit-ts](examples/aegis-commit-ts) | TypeScript | Exactly-once side effects across browser crashes using a sandbox target, durable audit log, and reconciliation |
+| [ghostack-ts](examples/ghostack-ts) | TypeScript | Reviewer-triggered chaos testing for exactly-once side effects across browser crashes and coordinator restarts |
 
 ## Running an example
 

@@ -1,12 +1,15 @@
 {
-  "name": "aegis-commit",
-  "version": "0.1.0",
+  "name": "ghostack",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "build": "tsc",
     "demo": "tsx src/cli.ts demo",
     "demo:local": "tsx src/cli.ts demo --local",
     "verify:evidence": "tsx scripts/verify-evidence.ts",
@@ -16,10 +19,14 @@
   },
   "dependencies": {
     "@solarisdk/browser": "0.1.1",
-    "@solarisdk/sdk": "0.1.2"
+    "@solarisdk/sdk": "0.1.2",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/sdk-trace-base": "^2.2.0",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@types/node": "^22.15.0",
+    "@types/pg": "^8.15.5",
     "tsx": "^4.20.0",
     "typescript": "^5.8.3"
   }

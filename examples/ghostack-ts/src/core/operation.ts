@@ -15,7 +15,7 @@ export function prepareOperation(intent: EffectIntent): PreparedOperation {
   }
   const intentHash = hashObject(intent)
   const operationId = `op_${sha256(`${intent.tenantId}:${intent.businessKey}`).slice(0, 24)}`
-  const idempotencyKey = `aeg_${sha256(`${operationId}:${intentHash}`).slice(0, 32)}`
+  const idempotencyKey = `gha_${sha256(`${operationId}:${intentHash}`).slice(0, 32)}`
   return { operationId, idempotencyKey, intentHash, intent }
 }
 

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="GhostAck kills browser agents at the worst possible moment and proves the side effect happened exactly once.">
+  <title>GhostAck — Chaos testing for browser agents</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="GhostAck home"><span class="mark">G//A</span><span>GHOSTACK</span></a>
+    <div class="system"><span class="pulse"></span> CONTROL PLANE ONLINE <span id="runtime">checking runtime</span></div>
+    <a class="repo" href="https://github.com/RitwijParmar/solari-cookbook/tree/main/examples/ghostack-ts">SOURCE ↗</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">CHAOS TESTING FOR BROWSER AGENTS / BUILT ON SOLARI</div>
+      <h1>Kill the browser.<br><em>Prove the action happened once.</em></h1>
+      <p>GhostAck attacks the one failure window most agent demos ignore: the server commits, the browser dies, and nobody knows whether retrying is safe.</p>
+      <div class="hero-proof"><span>20</span> agents <i></i><span>1</span> durable effect <i></i><span>0</span> duplicates</div>
+    </section>
+
+    <section class="lab">
+      <aside class="scenarios">
+        <div class="panel-label">01 / INJECT A FAILURE</div>
+        <button class="scenario active" data-scenario="ack_lost"><b>Kill after commit</b><small>Lose the acknowledgement at the worst moment</small><span>01</span></button>
+        <button class="scenario" data-scenario="before_send"><b>Kill before send</b><small>Prove absence before allowing a retry</small><span>02</span></button>
+        <button class="scenario" data-scenario="coordinator_restart"><b>Restart coordinator</b><small>Recover with all volatile state erased</small><span>03</span></button>
+        <button class="scenario" data-scenario="concurrency"><b>20-agent collision</b><small>Coalesce an identical concurrent burst</small><span>04</span></button>
+        <button class="scenario" data-scenario="intent_mutation"><b>Mutated intent attack</b><small>Fence payload drift on replay</small><span>05</span></button>
+        <div class="mode-row">
+          <label class="switch"><input id="live" type="checkbox"><span></span></label>
+          <div><b>Solari live runtime</b><small id="live-help">Available for kill-after-commit</small></div>
+        </div>
+        <button id="run" class="run"><span>RUN CHAOS TEST</span><b>⌁</b></button>
+      </aside>
+
+      <section class="stage">
+        <div class="stage-head"><div><span class="panel-label">02 / LIVE EXECUTION</span><h2 id="run-title">Waiting for a failure injection</h2></div><div id="run-id">NO ACTIVE RUN</div></div>
+        <div id="visual" class="visual idle">
+          <div class="browser-card b1"><span>BROWSER_01</span><b>AGENT</b><small id="b1-state">STANDBY</small></div>
+          <div class="wire w1"><i></i></div>
+          <div class="target"><span>AUTHORITATIVE TARGET</span><div class="target-core"><b id="effect-count">0</b><small>DURABLE EFFECTS</small></div><em id="target-state">READY</em></div>
+          <div class="wire w2"><i></i></div>
+          <div class="browser-card b2"><span>BROWSER_02</span><b>RECOVERY</b><small id="b2-state">STANDBY</small></div>
+          <div id="blast" class="blast">ACK LOST</div>
+        </div>
+        <div id="timeline" class="timeline"><div class="empty"><span>⌁</span><p>Choose a scenario and run the system.<br>This is a real execution, not a video.</p></div></div>
+      </section>
+
+      <aside class="proof">
+        <div class="panel-label">03 / INVARIANTS</div>
+        <div class="metric"><span>FINAL STATE</span><b id="final-state">—</b></div>
+        <div class="metric split"><div><span>TARGET REQUESTS</span><b id="requests">—</b></div><div><span>DUPLICATES</span><b id="duplicates">—</b></div></div>
+        <div class="checks">
+          <div><i id="c-effect"></i> At most one durable effect</div>
+          <div><i id="c-chain"></i> Audit chain intact</div>
+          <div><i id="c-intent"></i> Intent hash preserved</div>
+          <div><i id="c-receipt"></i> Receipt reconciled</div>
+        </div>
+        <div class="signature"><span>SIGNED EVIDENCE</span><code id="signature">Proof appears after a passing run</code></div>
+        <a id="download" class="download disabled" href="#">DOWNLOAD PROOF BUNDLE <span>↓</span></a>
+      </aside>
+    </section>
+
+    <section class="architecture">
+      <div><span class="panel-label">THE CLAIM</span><h3>Exactly-once is a protocol,<br>not a retry setting.</h3></div>
+      <ol>
+        <li><b>PREPARE</b><span>Bind business key to an immutable intent hash.</span></li>
+        <li><b>DISPATCH</b><span>Send a target-visible idempotency key.</span></li>
+        <li><b>RECONCILE</b><span>Read authoritative state after ambiguous failure.</span></li>
+        <li><b>PROVE</b><span>Seal the audit chain and receipt with Ed25519.</span></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer><span>GHOSTACK / RITWIJ ARYAN PARMAR</span><span>POSTGRES-READY · ED25519 · SOLARI BROWSER + SANDBOX</span></footer>
+  <script src="/app.js"></script>
+</body>
+</html>

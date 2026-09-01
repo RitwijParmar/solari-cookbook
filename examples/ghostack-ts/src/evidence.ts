@@ -12,7 +12,7 @@ export interface DemoCase {
 
 export interface DemoEvidence {
   readonly schemaVersion: "1.0"
-  readonly product: "Aegis Commit"
+  readonly product: "GhostAck"
   readonly generatedAt: string
   readonly mode: "deterministic" | "solari-live"
   readonly guarantee: string
@@ -67,7 +67,7 @@ function reportHtml(evidence: DemoEvidence): string {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Aegis Commit — verified run</title>
+  <title>GhostAck — verified run</title>
   <style>
     :root{color-scheme:dark;--bg:#07100d;--panel:#0d1814;--line:#243b31;--ink:#f0f7f3;--muted:#92a99e;--green:#63f2ad;--amber:#ffc96b;--red:#ff7a85}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#173326 0,transparent 38%),var(--bg);color:var(--ink);font:15px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace}.shell{max-width:1180px;margin:auto;padding:44px 24px 72px}header{display:grid;grid-template-columns:1.6fr 1fr;gap:34px;align-items:end;border-bottom:1px solid var(--line);padding-bottom:30px}.eyebrow{color:var(--green);letter-spacing:.18em;text-transform:uppercase;font-size:12px}h1{font:700 clamp(42px,8vw,90px)/.95 Inter,ui-sans-serif,sans-serif;letter-spacing:-.06em;margin:14px 0}.lede{font-size:18px;color:#c7d8d0;max-width:720px}.seal{border:1px solid var(--green);padding:18px;color:var(--green);text-align:center}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:28px 0}.metric,.card{background:linear-gradient(145deg,#101e18,#0a1410);border:1px solid var(--line);border-radius:10px}.metric{padding:20px}.metric strong{display:block;font-size:30px;color:var(--green)}.metric span{color:var(--muted);font-size:12px;text-transform:uppercase}.card{padding:22px;margin-top:14px}.case-head{display:flex;justify-content:space-between;gap:20px}.case-head b{font-size:18px}.ok{color:var(--green)}.unknown{color:var(--amber)}.timeline{display:grid;grid-template-columns:36px 1fr;gap:0 12px;margin-top:18px}.dot{width:11px;height:11px;border-radius:50%;background:var(--green);margin-top:7px;box-shadow:0 0 18px #63f2ad88}.event{border-left:1px solid var(--line);padding:0 0 18px 18px}.event code{color:var(--green)}.event small{display:block;color:var(--muted)}footer{color:var(--muted);margin-top:34px}.flag{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:4px 10px;margin:3px;color:#bad0c5}@media(max-width:760px){header{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}}
   </style>
@@ -78,7 +78,7 @@ function reportHtml(evidence: DemoEvidence): string {
   <section class="card"><div class="eyebrow">Runtime evidence</div><p><b>${evidence.runtime.provider}</b>${evidence.runtime.sandboxFingerprint ? ` · sandbox fingerprint ${evidence.runtime.sandboxFingerprint}` : ""} · ${evidence.runtime.browserSessionFingerprints.length} browser sessions</p></section>
   <div id="cases"></div>
   <section class="card"><div class="eyebrow">Guarantee boundary</div><p>${evidence.guarantee}</p><span class="flag">write-ahead log</span><span class="flag">idempotency key</span><span class="flag">read-after-unknown</span><span class="flag">hash-chained evidence</span></section>
-  <footer>Aegis Commit / Solari browser + sandbox / evidence schema ${evidence.schemaVersion}</footer>
+  <footer>GhostAck / Solari browser + sandbox / evidence schema ${evidence.schemaVersion}</footer>
 </main><script>const data=${safeJson(evidence)};const root=document.querySelector('#cases');for(const item of data.cases){const el=document.createElement('section');el.className='card';const events=item.result.projection.events.map(e=>\`<div class="dot"></div><div class="event"><code>\${e.type}</code><small>#\${e.sequence} · \${e.hash.slice(0,12)}</small></div>\`).join('');el.innerHTML=\`<div class="case-head"><b>\${item.name}</b><span class="ok">effect count = \${item.result.target.effects}</span></div><p><span class="unknown">fault: \${item.fault}</span> · recovered: \${item.result.recovered} · duplicate prevented: \${item.result.duplicatePrevented} · \${item.durationMs}ms</p><div class="timeline">\${events}</div>\`;root.append(el)}</script></body></html>`
 }
 

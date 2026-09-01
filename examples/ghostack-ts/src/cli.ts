@@ -19,7 +19,7 @@ const evidence =
     : await runSolariDemo(apiKey, artifactDirectory)
 await writeEvidence(artifactDirectory, evidence)
 
-console.log("Aegis Commit verified fault matrix")
+console.log("GhostAck verified fault matrix")
 console.log(`  operations       ${evidence.benchmark.operations}`)
 console.log(`  unknown outcomes ${evidence.benchmark.injectedAmbiguousOutcomes}`)
 console.log(`  duplicate effects ${evidence.benchmark.duplicateEffects}`)

@@ -73,7 +73,7 @@ const server = createServer(async (request, response) => {
     }
     if (request.method === "POST" && url.pathname === "/api/effects") {
       const input = await body(request);
-      if (!/^aeg_[a-f0-9]{32}$/.test(input.idempotencyKey) || !/^[a-f0-9]{64}$/.test(input.intentHash) || !Number.isSafeInteger(input.amountCents) || input.amountCents <= 0) return json(response, 422, { detail: "invalid canonical intent" });
+      if (!/^gha_[a-f0-9]{32}$/.test(input.idempotencyKey) || !/^[a-f0-9]{64}$/.test(input.intentHash) || !Number.isSafeInteger(input.amountCents) || input.amountCents <= 0) return json(response, 422, { detail: "invalid canonical intent" });
       state.requests += 1;
       let receipt = state.receipts[input.idempotencyKey];
       if (receipt && (receipt.intentHash !== input.intentHash || receipt.amountCents !== input.amountCents)) return json(response, 409, { detail: "idempotency key conflict" });

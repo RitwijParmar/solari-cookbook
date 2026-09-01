@@ -34,7 +34,7 @@ describe("sandbox target protocol", () => {
       assert.ok(Number.isInteger(port) && port > 0)
       const origin = `http://127.0.0.1:${port}`
       const payload = {
-        idempotencyKey: `aeg_${"1".repeat(32)}`,
+        idempotencyKey: `gha_${"1".repeat(32)}`,
         intentHash: "2".repeat(64),
         amountCents: 1_250,
       }

@@ -1,4 +1,4 @@
-# Aegis Commit architecture
+# GhostAck architecture
 
 ## Safety objective
 
