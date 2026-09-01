@@ -1,0 +1,15 @@
+Okay, so this is GhostAck. I built it around one browser-agent failure that most demos quietly skip.
+
+An agent sends an external action. The target commits it, but the browser dies before the acknowledgement comes back. Now retrying looks harmless. It isn't. That is how you create two payments, two tickets, or two orders.
+
+This is the actual G C P deployment. I turn on Solari live mode and run kill-after-commit. GhostAck allocates an isolated sandbox, seals the intent, and lets the first browser make the call.
+
+This bit matters. Browser one is gone, and the outcome is honestly unknown. I don't show zero here, because zero would be made up. And I don't blindly retry.
+
+Browser two reads the target's authoritative state, finds the original receipt, and suppresses the duplicate. The result is one request, one durable effect, and zero duplicates.
+
+The proof bundle is not a screenshot. It carries the hash-chained journal, OpenTelemetry spans, the receipt, and an Ed two-five-five-one-nine signature, so the run can be verified independently.
+
+Then I push the other boundary: twenty agents submit the same intent together. Nineteen calls coalesce behind one leader, and the target still gets one effect.
+
+That is GhostAck. Kill the browser at the worst moment, recover from durable truth, and prove the action happened once.
