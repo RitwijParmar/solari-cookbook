@@ -1,9 +1,13 @@
-Most browser agents have a dangerous blind spot. The form submits, the server commits, and then the browser disappears before the success response. Retry, and you may pay twice. Stop, and the workflow never finishes.
+Most browser-agent demos stop at the happy path. GhostAck starts at the failure they avoid.
 
-I built Aegis Commit for that ambiguous window. The target ledger runs inside a Solari sandbox. Browser one submits a synthetic vendor payment. The sandbox persists exactly one receipt, but I delay the acknowledgement and terminate the browser.
+The server commits an action. Before the acknowledgement comes back, I kill the browser. At this point a blind retry can duplicate a payment, an issue, or any other external effect.
 
-The coordinator records outcome unknown in a hash-chained write-ahead log. A completely fresh Solari browser then reads the authoritative receipt. The intent hash matches, so Aegis commits locally without sending a second payment.
+This is the deployed control lab, not a prerecorded result page. I choose “kill after commit” and run it. GhostAck seals the intent, dispatches browser one, and deliberately destroys it inside the ambiguous window.
 
-This is the real run: two browser sessions, one target effect, zero duplicates, and a three-point-eight-four second recovery. The deterministic suite also covers one hundred schedules, concurrent callers, pre-send crashes, mutated intents, and audit tampering.
+Notice the system does not retry. A second browser performs an authoritative read, finds the original receipt, and suppresses the duplicate.
 
-Everything is public: the implementation, threat model, machine-readable evidence, green CI, and the GCP deployment. I'm Ritwij Aryan Parmar. I built the control plane browser agents need before they touch expensive side effects.
+The final result is one target request, one durable effect, and zero duplicates. The same lab can erase the coordinator process, collide twenty agents, or mutate the replayed intent.
+
+Every run produces a hash-chained journal, real OpenTelemetry spans, and an Ed25519-signed proof bundle. The Solari live path runs the target in an isolated sandbox and uses two independent browser sessions.
+
+That is GhostAck: kill the browser, recover from durable truth, and prove the action happened once.

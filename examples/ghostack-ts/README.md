@@ -6,6 +6,10 @@ GhostAck is a chaos-testing control plane for browser agents. It deliberately te
 
 **[Open the interactive control lab](https://ghostack-control-lab-980932890834.us-east1.run.app/)**
 
+[![GhostAck running demo](demo/ghostack-cover.jpg)](demo/ghostack-demo.mp4)
+
+**[Watch the 62-second running demo](demo/ghostack-demo.mp4)** — frames captured from the actual reviewer-triggered crash flow, with a natural English walkthrough.
+
 This is not a prerecorded result page. A reviewer can trigger five executions:
 
 | Failure injection | What GhostAck must prove |

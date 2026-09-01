@@ -1,16 +1,18 @@
-# Demo assets
+# GhostAck running demo
 
-The video is generated from the public Cloud Run dashboard, its committed live
-evidence, the public GitHub Actions result, and Ritwij Aryan Parmar's supplied
-portrait. It does not stage a fake target or claim that deterministic fixtures
-are live infrastructure.
+The 62-second video uses frames captured while the real GhostAck control plane was executing a reviewer-triggered kill-after-commit run. It is not a slide deck or a mocked product animation.
+
+- `ghostack-demo.mp4` — narrated 1080p product demonstration;
+- `ghostack-cover.jpg` — social and repository preview;
+- `capture/frame-*.jpg` — the actual browser-frame sequence used for the running segment;
+- `narration.txt` — reproducible natural-English script;
+- `render_video.py` — reproducible renderer.
+
+Re-render on macOS:
 
 ```bash
-say -v "Aman (English (India))" -r 178 -f narration.txt -o narration.aiff
-FFMPEG=/path/to/ffmpeg python3 render_video.py
+say -v 'Aman (English (India))' -r 185 -f narration.txt -o narration.aiff
+FFMPEG_BIN=/path/to/ffmpeg python3 render_video.py
 ```
 
-Outputs:
-
-- `aegis-commit-demo.mp4` — narrated 1080p running-product walkthrough;
-- `aegis-commit-cover.jpg` — 16:9 social preview image.
+The committed video includes no API key, signed Solari capability URL, browser cookie, or private credential.

@@ -232,6 +232,9 @@ export class ChaosControlPlane {
       fault === "before_send" ? "The outcome is unknown until an authoritative read." : "The server committed, but the acknowledgement never reached the agent.",
       "danger",
     )
+    // Keep the ambiguous window visible long enough for a human reviewer to inspect it.
+    // This does not delay or alter the protocol decision itself.
+    await pause(650)
     const result = await coordinator.execute(intent, { fault })
     this.step(
       run,
@@ -251,6 +254,7 @@ export class ChaosControlPlane {
       const coordinator = new ExactlyOnceCoordinator(new MemoryAuditLog(), target)
       const result = await coordinator.execute(this.intent(run), { fault: "after_commit_before_ack" })
       this.step(run, "crash", "Solari browser #1 terminated", "The target committed before the delayed acknowledgement.", "danger")
+      await pause(650)
       this.step(run, "reconcile", "Solari browser #2 recovered receipt", "One durable effect, zero duplicate actions.", "success")
       return { result, runtime: { ...target.evidence() } }
     } finally {
