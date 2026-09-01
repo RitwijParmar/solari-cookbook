@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="GhostAck kills browser agents at the worst possible moment and proves the side effect happened exactly once.">
   <title>GhostAck — Chaos testing for browser agents</title>
-  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/app.css?v=20260901.2">
 </head>
 <body>
+  <a class="skip-link" href="#control-lab">Skip to control lab</a>
   <div class="noise"></div>
   <header class="topbar">
     <a class="brand" href="/" aria-label="GhostAck home"><span class="mark">G//A</span><span>GHOSTACK</span></a>
@@ -23,19 +24,20 @@
       <div class="hero-proof"><span>20</span> agents <i></i><span>1</span> durable effect <i></i><span>0</span> duplicates</div>
     </section>
 
-    <section class="lab">
+    <section id="control-lab" class="lab" aria-label="GhostAck chaos control lab">
       <aside class="scenarios">
         <div class="panel-label">01 / INJECT A FAILURE</div>
-        <button class="scenario active" data-scenario="ack_lost"><b>Kill after commit</b><small>Lose the acknowledgement at the worst moment</small><span>01</span></button>
-        <button class="scenario" data-scenario="before_send"><b>Kill before send</b><small>Prove absence before allowing a retry</small><span>02</span></button>
-        <button class="scenario" data-scenario="coordinator_restart"><b>Restart coordinator</b><small>Recover with all volatile state erased</small><span>03</span></button>
-        <button class="scenario" data-scenario="concurrency"><b>20-agent collision</b><small>Coalesce an identical concurrent burst</small><span>04</span></button>
-        <button class="scenario" data-scenario="intent_mutation"><b>Mutated intent attack</b><small>Fence payload drift on replay</small><span>05</span></button>
+        <button type="button" class="scenario active" data-scenario="ack_lost" aria-pressed="true"><b>Kill after commit</b><small>Lose the acknowledgement at the worst moment</small><span>01</span></button>
+        <button type="button" class="scenario" data-scenario="before_send" aria-pressed="false"><b>Kill before send</b><small>Prove absence before allowing a retry</small><span>02</span></button>
+        <button type="button" class="scenario" data-scenario="coordinator_restart" aria-pressed="false"><b>Restart coordinator</b><small>Recover with all volatile state erased</small><span>03</span></button>
+        <button type="button" class="scenario" data-scenario="concurrency" aria-pressed="false"><b>20-agent collision</b><small>Coalesce an identical concurrent burst</small><span>04</span></button>
+        <button type="button" class="scenario" data-scenario="intent_mutation" aria-pressed="false"><b>Mutated intent attack</b><small>Fence payload drift on replay</small><span>05</span></button>
         <div class="mode-row">
-          <label class="switch"><input id="live" type="checkbox"><span></span></label>
+          <label class="switch"><input id="live" type="checkbox" aria-label="Use the live Solari runtime"><span aria-hidden="true"></span></label>
           <div><b>Solari live runtime</b><small id="live-help">Available for kill-after-commit</small></div>
         </div>
-        <button id="run" class="run"><span>RUN CHAOS TEST</span><b>⌁</b></button>
+        <button id="run" type="button" class="run"><span>RUN CHAOS TEST</span><b aria-hidden="true">⌁</b></button>
+        <p id="request-error" class="request-error" role="alert" hidden></p>
       </aside>
 
       <section class="stage">
@@ -48,12 +50,12 @@
           <div class="browser-card b2"><span>BROWSER_02</span><b>RECOVERY</b><small id="b2-state">STANDBY</small></div>
           <div id="blast" class="blast">ACK LOST</div>
         </div>
-        <div id="timeline" class="timeline"><div class="empty"><span>⌁</span><p>Choose a scenario and run the system.<br>This is a real execution, not a video.</p></div></div>
+        <div id="timeline" class="timeline" role="log" aria-live="polite" aria-relevant="additions"><div class="empty"><span aria-hidden="true">⌁</span><p>Choose a scenario and run the system.<br>This is a real execution, not a video.</p></div></div>
       </section>
 
       <aside class="proof">
         <div class="panel-label">03 / INVARIANTS</div>
-        <div class="metric"><span>FINAL STATE</span><b id="final-state">—</b></div>
+        <div class="metric"><span>FINAL STATE</span><b id="final-state" aria-live="polite">—</b></div>
         <div class="metric split"><div><span>TARGET REQUESTS</span><b id="requests">—</b></div><div><span>DUPLICATES</span><b id="duplicates">—</b></div></div>
         <div class="checks">
           <div><i id="c-effect"></i> At most one durable effect</div>
@@ -62,7 +64,7 @@
           <div><i id="c-receipt"></i> Receipt reconciled</div>
         </div>
         <div class="signature"><span>SIGNED EVIDENCE</span><code id="signature">Proof appears after a passing run</code></div>
-        <a id="download" class="download disabled" href="#">DOWNLOAD PROOF BUNDLE <span>↓</span></a>
+        <a id="download" class="download disabled" href="#" aria-disabled="true">DOWNLOAD PROOF BUNDLE <span aria-hidden="true">↓</span></a>
       </aside>
     </section>
 
@@ -78,6 +80,7 @@
   </main>
 
   <footer><span>GHOSTACK / RITWIJ ARYAN PARMAR</span><span>POSTGRES-READY · ED25519 · SOLARI BROWSER + SANDBOX</span></footer>
-  <script src="/app.js"></script>
+  <noscript>GhostAck needs JavaScript to execute and display chaos runs.</noscript>
+  <script src="/app.js?v=20260901.2"></script>
 </body>
 </html>

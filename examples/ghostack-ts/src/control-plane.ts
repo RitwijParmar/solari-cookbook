@@ -14,6 +14,17 @@ import type { AuditEvent, EffectIntent, ExecutionResult } from "./core/types.js"
 export type Scenario = "ack_lost" | "before_send" | "coordinator_restart" | "concurrency" | "intent_mutation"
 export type RunStatus = "queued" | "running" | "passed" | "failed"
 
+export class ControlPlaneError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly code: string,
+    readonly retryAfterSeconds?: number,
+  ) {
+    super(message)
+  }
+}
+
 export interface RunStep {
   readonly at: string
   readonly phase: string
@@ -92,8 +103,16 @@ export class ChaosControlPlane {
 
   create(scenario: Scenario, live: boolean): ChaosRun {
     const mode = live ? "solari-live" : "deterministic"
-    if (live && process.env.SOLARI_API_KEY === undefined) throw new Error("Live Solari runtime is not configured")
-    if (live && Date.now() - this.liveRunAt < 60_000) throw new Error("Live runtime cooldown is 60 seconds")
+    if (live && scenario !== "ack_lost") {
+      throw new ControlPlaneError("Live Solari mode only supports kill-after-commit.", 400, "unsupported_live_scenario")
+    }
+    if (live && process.env.SOLARI_API_KEY === undefined) {
+      throw new ControlPlaneError("Live Solari runtime is not configured.", 503, "live_runtime_unavailable")
+    }
+    if (live && Date.now() - this.liveRunAt < 60_000) {
+      const remaining = Math.ceil((60_000 - (Date.now() - this.liveRunAt)) / 1_000)
+      throw new ControlPlaneError(`Live runtime is cooling down. Try again in ${remaining} seconds.`, 429, "live_runtime_cooldown", remaining)
+    }
     if (live) this.liveRunAt = Date.now()
     const run: ChaosRun = {
       id: `run_${randomUUID().replaceAll("-", "").slice(0, 12)}`,
@@ -108,8 +127,19 @@ export class ChaosControlPlane {
     this.telemetry.set(run.id, telemetry)
     const tracedRun: ChaosRun = { ...run, traceId: telemetry.traceId }
     this.runs.set(run.id, tracedRun)
+    this.prune()
     void this.execute(tracedRun)
     return tracedRun
+  }
+
+  private prune(): void {
+    if (this.runs.size <= 50) return
+    for (const [id, run] of this.runs) {
+      if (run.status === "passed" || run.status === "failed") {
+        this.runs.delete(id)
+        if (this.runs.size <= 50) return
+      }
+    }
   }
 
   private step(run: ChaosRun, phase: string, title: string, detail: string, tone: RunStep["tone"] = "neutral"): void {
