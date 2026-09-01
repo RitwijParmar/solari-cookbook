@@ -16,7 +16,7 @@ export class PostgresAuditLog implements AuditLog {
         sequence BIGSERIAL PRIMARY KEY,
         operation_id TEXT NOT NULL,
         type TEXT NOT NULL,
-        at TIMESTAMPTZ NOT NULL,
+        at TEXT NOT NULL,
         payload JSONB NOT NULL,
         previous_hash TEXT NOT NULL,
         hash TEXT NOT NULL UNIQUE
@@ -74,7 +74,7 @@ export class PostgresAuditLog implements AuditLog {
       sequence: Number(row.sequence),
       operationId: String(row.operation_id),
       type: String(row.type) as AuditEventType,
-      at: new Date(String(row.at)).toISOString(),
+      at: String(row.at),
       payload: row.payload as Readonly<Record<string, unknown>>,
       previousHash: String(row.previous_hash),
       hash: String(row.hash),
